@@ -15,11 +15,13 @@ CANVAS_HEIGHT = canvas.height = 700;
 
 const numberOfEnemies = 40;
 const enemiesArray = [];
-
-const enemyImage = new Image();
-enemyImage.src = '/assets/enemy1.png'
+// const enemyImage = new Image();
+// enemyImage.src = '/assets/enemy1.png'
+let gameFrame = 0;
 class Enemy {
     constructor() {
+        this.image = new Image();
+        this.image.src = '/assets/enemy1.png'
         this.x = Math.random() * canvas.width;
         this.y = Math.random() * canvas.height;
         this.a = Math.random() * canvas.width;
@@ -29,12 +31,18 @@ class Enemy {
         this.spriteHeight = 155
         this.width = this.spriteWidth / 2.5;
         this.height = this.spriteHeight / 2.5;
+        this.frame = 0;
+        this.flapSpeed = Math.floor(Math.random() * 3 + 1)
     }
     update() {
         this.x += this.speed;
         this.y += this.speed;
-        this.a += this.speed;
-        this.b += this.speed;
+        // animate sprites
+        // gameFrame % 2 === 0 => all flap at same speed once after every animate func call
+        if (gameFrame % this.flapSpeed === 0) {
+
+            this.frame > 4 ? this.frame = 0 : this.frame++;
+        }
     }
     draw() {
         // This puts all 6 enemies in the given dimensiions
@@ -43,7 +51,7 @@ class Enemy {
         // Crop out single frame ie 1 enemy object 
         // 2-5 Args rep where you want to crop the image
         // 6-9 args rep where you want to place the cropped image on canvas
-        ctx.drawImage(enemyImage, 0, 0, this.spriteWidth, this.spriteHeight, this.x, this.y, this.width, this.height);
+        ctx.drawImage(this.image, this.frame * this.spriteWidth, 0, this.spriteWidth, this.spriteHeight, this.x, this.y, this.width, this.height);
 
     }
 }
@@ -61,6 +69,7 @@ function animate() {
         enemy.update();
         enemy.draw();
     })
+    gameFrame++;
     requestAnimationFrame(animate);
 }
 
