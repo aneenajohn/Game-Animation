@@ -13,17 +13,22 @@ const ctx = canvas.getContext('2d');
 CANVAS_WIDTH = canvas.width = 500;
 CANVAS_HEIGHT = canvas.height = 700;
 
-const numberOfEnemies = 100;
+const numberOfEnemies = 40;
 const enemiesArray = [];
+
+const enemyImage = new Image();
+enemyImage.src = '/assets/enemy1.png'
 class Enemy {
     constructor() {
         this.x = Math.random() * canvas.width;
         this.y = Math.random() * canvas.height;
         this.a = Math.random() * canvas.width;
         this.b = Math.random() * canvas.height;
-        this.width = 20;
-        this.height = 20;
         this.speed = Math.random() * 4 - 2;
+        this.spriteWidth = 293 // width of single enemy sprite
+        this.spriteHeight = 155
+        this.width = this.spriteWidth / 2.5;
+        this.height = this.spriteHeight / 2.5;
     }
     update() {
         this.x += this.speed;
@@ -32,8 +37,14 @@ class Enemy {
         this.b += this.speed;
     }
     draw() {
-        ctx.fillRect(this.x, this.y, this.width, this.height);
-        ctx.strokeRect(this.a, this.b, this.width, this.height)
+        // This puts all 6 enemies in the given dimensiions
+        // ctx.drawImage(enemyImage, this.x, this.y, this.width, this.height);
+
+        // Crop out single frame ie 1 enemy object 
+        // 2-5 Args rep where you want to crop the image
+        // 6-9 args rep where you want to place the cropped image on canvas
+        ctx.drawImage(enemyImage, 0, 0, this.spriteWidth, this.spriteHeight, this.x, this.y, this.width, this.height);
+
     }
 }
 
